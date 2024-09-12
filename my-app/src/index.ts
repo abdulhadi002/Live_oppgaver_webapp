@@ -1,14 +1,21 @@
 import { serve } from '@hono/node-server'
 import { Hono } from 'hono'
+import { cors } from 'hono/cors'
 
 const app = new Hono()
 
+const dadjokes: any[] = []
+
+app.use('*', cors())
+
 app.get('/', (c) => {
-  return c.text('Hello Hono!')
+  return c.json('Hello Hono!')
 })
 
-app.post('/', (c) => {
-  return c.text('POST/')
+app.post('/', async (c) => {
+  const body = await c.req.json()
+  dadjokes.push(body)
+  return c.json(dadjokes)
 })
 
 const port = 3000
